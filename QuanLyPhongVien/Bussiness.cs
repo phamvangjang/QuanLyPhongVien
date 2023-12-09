@@ -1,6 +1,7 @@
 ﻿using QuanLyPhongVien.Model;
 using System;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -30,7 +31,14 @@ namespace QuanLyPhongVien
                 item.SubItems.Add(row["tenPV"].ToString());
                 item.SubItems.Add(row["GT"].ToString());
                 item.SubItems.Add(row["ngayVL"].ToString());
-                lv.Items.Add(item);
+                TimeSpan thamnien = DateTime.Now - DateTime.Parse(row["ngayVL"].ToString());
+                int thamNienNgay = (int)thamnien.TotalDays;
+                int tn = thamNienNgay / 365;
+                if (tn > 5)
+                {
+                    item.BackColor = Color.Yellow;
+                }
+                lv.Items.Add(item); 
             }
         }
 
@@ -58,16 +66,24 @@ namespace QuanLyPhongVien
                     listViewItem.SubItems.Add(gt);
                     listViewItem.SubItems.Add(ngayvl);
 
-                    form1.lvDSPV.Items.Add(listViewItem);
-
                     pVToaSoan.id = form1.txtMaPV.Text;
                     pVToaSoan.name = form1.txtHoTen.Text;
                     pVToaSoan.phone = form1.txtDienthoai.Text;
                     pVToaSoan.gender = gt;
                     pVToaSoan.dayWork = DateTime.Parse(ngayvl);
+                    TimeSpan thamnien = DateTime.Now - DateTime.Parse(ngayvl);
+                    int thamNienNgay = (int)thamnien.TotalDays;
+                    int tn = thamNienNgay / 365;
+
                     string loaipv = "ToaSoan";
                     pVToaSoan.LoaiPV = loaipv;
                     pVToaSoan.LamThemGio = int.Parse(form1.txtGioLT.Text);
+
+                    if (tn>5)
+                    {
+                        listViewItem.BackColor = Color.Yellow;
+                    }
+                    form1.lvDSPV.Items.Add(listViewItem);
 
                     DAO.Instance.LuuPVTS(pVToaSoan);
                     MessageBox.Show("Đã thêm phóng viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -89,16 +105,24 @@ namespace QuanLyPhongVien
                     listViewItem.SubItems.Add(gt);
                     listViewItem.SubItems.Add(ngayvl);
 
-                    form1.lvDSPV.Items.Add(listViewItem);
-
                     pVTT.id = form1.txtMaPV.Text;
                     pVTT.name = form1.txtHoTen.Text;
                     pVTT.phone = form1.txtDienthoai.Text;
                     pVTT.gender = gt;
                     pVTT.dayWork = DateTime.Parse(ngayvl);
+                    TimeSpan thamnien = DateTime.Now - DateTime.Parse(ngayvl);
+                    int thamNienNgay = (int)thamnien.TotalDays;
+                    int tn = thamNienNgay / 365;
+
                     string loaipv = "ThuongTru";
                     pVTT.LoaiPV = loaipv;
                     pVTT.PhuCap = float.Parse(form1.txtPC.Text);
+
+                    if (tn > 5)
+                    {
+                        listViewItem.BackColor = Color.Yellow;
+                    }
+                    form1.lvDSPV.Items.Add(listViewItem);
 
                     DAO.Instance.LuuPVTT(pVTT);
                     MessageBox.Show("Đã thêm phóng viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
