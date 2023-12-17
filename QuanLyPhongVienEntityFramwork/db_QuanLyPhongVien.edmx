@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="db_QuanLyPhongVienModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="PhongVien">
+          <Key>
+            <PropertyRef Name="maPV" />
+          </Key>
+          <Property Name="maPV" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="tenPV" Type="nvarchar" MaxLength="50" />
+          <Property Name="GT" Type="nvarchar" MaxLength="50" />
+          <Property Name="soDT" Type="nvarchar" MaxLength="50" />
+          <Property Name="ngayVL" Type="datetime" />
+          <Property Name="PC" Type="float" />
+          <Property Name="gioLT" Type="int" />
+          <Property Name="loaiPV" Type="nvarchar" MaxLength="50" />
+          <Property Name="Luong" Type="float" />
+        </EntityType>
+        <EntityContainer Name="db_QuanLyPhongVienModelStoreContainer">
+          <EntitySet Name="PhongVien" EntityType="Self.PhongVien" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="db_QuanLyPhongVienModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="PhongVien">
+          <Key>
+            <PropertyRef Name="maPV" />
+          </Key>
+          <Property Name="maPV" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="tenPV" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="GT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="soDT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ngayVL" Type="DateTime" Precision="3" />
+          <Property Name="PC" Type="Double" />
+          <Property Name="gioLT" Type="Int32" />
+          <Property Name="loaiPV" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Luong" Type="Double" />
+        </EntityType>
+        <EntityContainer Name="db_QuanLyPhongVienEntities3" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="PhongViens" EntityType="Self.PhongVien" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="db_QuanLyPhongVienModelStoreContainer" CdmEntityContainer="db_QuanLyPhongVienEntities3">
+          <EntitySetMapping Name="PhongViens">
+            <EntityTypeMapping TypeName="db_QuanLyPhongVienModel.PhongVien">
+              <MappingFragment StoreEntitySet="PhongVien">
+                <ScalarProperty Name="maPV" ColumnName="maPV" />
+                <ScalarProperty Name="tenPV" ColumnName="tenPV" />
+                <ScalarProperty Name="GT" ColumnName="GT" />
+                <ScalarProperty Name="soDT" ColumnName="soDT" />
+                <ScalarProperty Name="ngayVL" ColumnName="ngayVL" />
+                <ScalarProperty Name="PC" ColumnName="PC" />
+                <ScalarProperty Name="gioLT" ColumnName="gioLT" />
+                <ScalarProperty Name="loaiPV" ColumnName="loaiPV" />
+                <ScalarProperty Name="Luong" ColumnName="Luong" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
