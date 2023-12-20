@@ -265,5 +265,43 @@ namespace QuanLyPhongVienEntityFramwork
                 MessageBox.Show("Bạn chưa chọn phóng viên nào để xóa", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void btnSua_Click(object sender, EventArgs e)
+        {
+            if (lvDSPV.SelectedItems.Count > 0)
+            {
+                int index = lvDSPV.Items.IndexOf(lvDSPV.SelectedItems[0]);
+                string mpv = lvDSPV.SelectedItems[0].SubItems[0].Text.Trim();
+
+                PhongVien pv = _db.PhongViens.Where(p => p.maPV.Trim() == mpv).SingleOrDefault();
+                float l = 0;
+                if (rdbtnToasoan.Checked)
+                {
+                    l += 12000000 + float.Parse(txtGioLT.Text) * 100000 * (float)1.5;
+                }
+                else
+                {
+                    l +=12000000 + float.Parse(txtPC.Text);
+                }
+
+                if (Validate())
+                {
+                    pv.tenPV = txtHoTen.Text;
+                    pv.GT = rdbtnNam.Checked ? "Nam" : "Nu";
+                    pv.soDT=txtDienthoai.Text;
+                    pv.ngayVL = dtNVL.Value;
+                    pv.loaiPV = rdbtnToasoan.Checked ? "ToaSoan" : "ThuongTru";
+                    pv.Luong = l;
+                    _db.SaveChanges();
+                    txtMaPV.Enabled = true;
+                    ResetListView(_db.PhongViens.ToList());
+                    Reset();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Bạn chưa chọn phóng viên nào để sửa", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
