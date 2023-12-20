@@ -227,5 +227,43 @@ namespace QuanLyPhongVienEntityFramwork
             }
         }
 
+        private void btnXoa_Click(object sender, EventArgs e)
+        {
+            if (lvDSPV.SelectedItems.Count>0)
+            {
+                if(MessageBox.Show("Bạn có chắc chắn muốn xóa phóng viên đã chọn?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
+                {
+                    int index = lvDSPV.Items.IndexOf(lvDSPV.SelectedItems[0]) ;
+                    string mpv = lvDSPV.SelectedItems[0].SubItems[0].Text.Trim() ;
+
+                    PhongVien pv = _db.PhongViens.Where(p => p.maPV.Trim() == mpv).SingleOrDefault();
+                    _db.PhongViens.Remove(pv);
+                    _db.SaveChanges();
+
+                    lvDSPV.Items.Remove(lvDSPV.SelectedItems[0]);
+
+                    if (lvDSPV.Items.Count>0)
+                    {
+                        if (index<lvDSPV.Items.Count)
+                        {
+                            lvDSPV.Items[index].Selected = true;
+                        }
+                        else
+                        {
+                            Reset();
+                        }
+                    }
+                    else if (lvDSPV.Items.Count == 0)
+                    {
+                        Reset();
+                    }
+                }
+                MessageBox.Show("Đã xóa phóng viên thành công", "Xác nhận", MessageBoxButtons.OK, MessageBoxIcon.Question);
+            }
+            else
+            {
+                MessageBox.Show("Bạn chưa chọn phóng viên nào để xóa", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
