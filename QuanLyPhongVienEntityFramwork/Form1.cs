@@ -181,7 +181,51 @@ namespace QuanLyPhongVienEntityFramwork
 
         private void lvDSPV_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            if (lvDSPV.SelectedItems.Count>0)
+            {
+                //get id in listview
+                string mapv = lvDSPV.SelectedItems[0].SubItems[0].Text;
+                txtMaPV.Enabled = false;
+                //find in _db if exists ?
+                var pv = _db.PhongViens.SingleOrDefault(z => z.maPV == mapv);
+                if (pv!=null)
+                {
+                    txtMaPV.Text=pv.maPV.Trim();
+                    txtHoTen.Text=pv.soDT.Trim();
+                    if (pv.GT=="Nam")
+                    {
+                        rdbtnNam.Checked = true;
+                    }
+                    else
+                    {
+                        rdbtnNu.Checked = true;
+                    }
+                    dtNVL.Value = pv.ngayVL.Value;
+                    txtDienthoai.Text=pv.soDT.Trim() ;
+                    if (pv.loaiPV=="ToaSoan")
+                    {
+                        rdbtnToasoan.Checked = true;
+                        float lt = ((float)(pv.Luong - 12000000) / (100000 * (float)1.5));
+                        txtGioLT.Text = lt.ToString();
+                    }
+                    else if (pv.loaiPV=="ThuongTru")
+                    {
+                        rdbtnTT.Checked = true;
+                        double pc = ((double)(pv.Luong - 12000000)) ;
+                        txtPC.Text = pc.ToString().Trim();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Không tìm thấy thông tin phóng viên!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return ;
+                }
+            }
+            else
+            {
+                txtMaPV.Enabled = true;
+            }
         }
+
     }
 }
