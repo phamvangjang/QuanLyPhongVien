@@ -205,6 +205,7 @@
             this.btnSapXep.TabIndex = 4;
             this.btnSapXep.Text = "Sắp Xếp ";
             this.btnSapXep.UseVisualStyleBackColor = false;
+            this.btnSapXep.Click += new System.EventHandler(this.btnSapXep_Click);
             // 
             // lblGT
             // 

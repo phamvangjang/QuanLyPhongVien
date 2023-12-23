@@ -191,7 +191,7 @@ namespace QuanLyPhongVienEntityFramwork
                 if (pv!=null)
                 {
                     txtMaPV.Text=pv.maPV.Trim();
-                    txtHoTen.Text=pv.soDT.Trim();
+                    txtHoTen.Text=pv.tenPV.Trim();
                     if (pv.GT=="Nam")
                     {
                         rdbtnNam.Checked = true;
@@ -301,6 +301,18 @@ namespace QuanLyPhongVienEntityFramwork
             else
             {
                 MessageBox.Show("Bạn chưa chọn phóng viên nào để sửa", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnSapXep_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var sort = _db.PhongViens.OrderBy(p => p.ngayVL).ThenBy(p => p.tenPV).ToList();
+                ResetListView(sort);
+            }catch (Exception ex)
+            {
+                MessageBox.Show("Error: "+ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
