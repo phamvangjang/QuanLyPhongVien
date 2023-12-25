@@ -315,5 +315,38 @@ namespace QuanLyPhongVienEntityFramwork
                 MessageBox.Show("Error: "+ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void btnThongKe_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var s = from pv in _db.PhongViens
+                        group pv by pv.loaiPV into g
+                        select new
+                        {
+                            LoaiPV = g.Key,
+                            TongSoLuong = g.Count(),
+                            TongLuong = g.Sum(p => p.Luong)
+                        };
+
+                string message = "Thống kê theo loại phóng viên\n\n";
+
+                foreach (var t in s)
+                {
+                    if (t.LoaiPV=="ToaSoan")
+                        message += $"Phóng viên tại tòa soạn:\n";
+                    else
+                        message += $"Phóng viên thường trú:\n";
+                    message += $"Số lượng: {t.TongSoLuong}\n";
+                    message += $"Tổng lương chi: {t.TongLuong:#,#}\n\n";
+                }
+
+                MessageBox.Show(message, "Thống kê", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
