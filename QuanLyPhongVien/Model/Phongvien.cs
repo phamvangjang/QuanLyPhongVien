@@ -16,5 +16,6 @@ namespace QuanLyPhongVien.Model
         public float PhuCap { get; set; }
         public int LamThemGio { get; set; }
         public string LoaiPV { get; set; }
+        public float Luong {  get; set; }
     }
 }

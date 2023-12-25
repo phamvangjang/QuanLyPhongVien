@@ -48,6 +48,7 @@ namespace QuanLyPhongVien
             {
                 txtGioLT.Visible = true;
                 txtPC.Visible = false;
+                txtGioLT.Clear();
                 lblSogioLT.Visible = true;
                 lblPC.Visible = false;
             }
@@ -59,6 +60,7 @@ namespace QuanLyPhongVien
             {
                 txtGioLT.Visible = false;
                 txtPC.Visible = true;
+                txtPC.Clear();
                 lblPC.Visible = true;
                 lblSogioLT.Visible = false;
             }
@@ -85,36 +87,39 @@ namespace QuanLyPhongVien
             Reset();
         }
 
-        public bool validate = false;
-        private void btnLuu_Click(object sender, EventArgs e)
+        public bool Validate()
         {
             // Kiểm tra thông tin có hợp lệ
-            if (string.IsNullOrEmpty(txtMaPV.Text))
+            if (string.IsNullOrEmpty(txtMaPV.Text) || string.IsNullOrEmpty(txtHoTen.Text) || string.IsNullOrEmpty(txtDienthoai.Text))
             {
-                MessageBox.Show("Mã pv không được để trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                MessageBox.Show("Thông tin không được để trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
-            if (string.IsNullOrEmpty(txtHoTen.Text))
+            if (dtNVL.Value > DateTime.Now)
             {
-                MessageBox.Show("Tên pv không được để trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                MessageBox.Show("Ngày vào làm không được lớn hơn ngày hiện tại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
-            if (string.IsNullOrEmpty(txtDienthoai.Text))
+            if (txtDienthoai.Text.Any(n => !char.IsDigit(n)) || txtDienthoai.Text.Length != 10)
             {
-                MessageBox.Show("dien thoai không được để trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                MessageBox.Show("Số điện thoại phải là một dãy số và có 10 chữ số!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
-            DateTime nvl;
-            if (!DateTime.TryParse(dtNVL.Text, out nvl))
+            if (txtGioLT.Text.Any(n => !char.IsDigit(n)) && rdbtnToasoan.Checked)
             {
-                MessageBox.Show("Ngày vao lam không hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                MessageBox.Show("Giờ làm thêm phải là số dương!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
-            else
+            if (txtPC.Text.Any(n => !char.IsDigit(n)) && rdbtnTT.Checked)
             {
-                validate = true;
+                MessageBox.Show("Phụ cấp phải là số dương!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
-            if (validate == true)
+            return true;
+        }
+        private void btnLuu_Click(object sender, EventArgs e)
+        {
+            if (Validate())
             {
                 Bussiness.Instance.Luu(lvDSPV);
             }
@@ -203,6 +208,7 @@ namespace QuanLyPhongVien
                     // Thực hiện xóa từ cơ sở dữ liệu
                     Bussiness.Instance.XoaThongtinTheoMaDon(maDon);
                     MessageBox.Show("Đã xóa phong vien thành công!", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
                 }
             }
             else

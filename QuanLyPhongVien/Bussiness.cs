@@ -36,7 +36,7 @@ namespace QuanLyPhongVien
                 int tn = thamNienNgay / 365;
                 if (tn > 5)
                 {
-                    item.BackColor = Color.Yellow;
+                    item.BackColor = Color.LightGoldenrodYellow;
                 }
                 lv.Items.Add(item); 
             }
@@ -71,6 +71,7 @@ namespace QuanLyPhongVien
                     pVToaSoan.phone = form1.txtDienthoai.Text;
                     pVToaSoan.gender = gt;
                     pVToaSoan.dayWork = DateTime.Parse(ngayvl);
+                    pVToaSoan.Luong = 12000000 + (float)1.5 * 100000 * float.Parse(form1.txtGioLT.Text);
                     TimeSpan thamnien = DateTime.Now - DateTime.Parse(ngayvl);
                     int thamNienNgay = (int)thamnien.TotalDays;
                     int tn = thamNienNgay / 365;
@@ -81,7 +82,7 @@ namespace QuanLyPhongVien
 
                     if (tn>5)
                     {
-                        listViewItem.BackColor = Color.Yellow;
+                        listViewItem.BackColor = Color.LightGoldenrodYellow;
                     }
                     form1.lvDSPV.Items.Add(listViewItem);
 
@@ -110,6 +111,7 @@ namespace QuanLyPhongVien
                     pVTT.phone = form1.txtDienthoai.Text;
                     pVTT.gender = gt;
                     pVTT.dayWork = DateTime.Parse(ngayvl);
+                    pVTT.Luong = 12000000 + float.Parse(form1.txtPC.Text);
                     TimeSpan thamnien = DateTime.Now - DateTime.Parse(ngayvl);
                     int thamNienNgay = (int)thamnien.TotalDays;
                     int tn = thamNienNgay / 365;
@@ -120,7 +122,7 @@ namespace QuanLyPhongVien
 
                     if (tn > 5)
                     {
-                        listViewItem.BackColor = Color.Yellow;
+                        listViewItem.BackColor = Color.LightGoldenrodYellow;
                     }
                     form1.lvDSPV.Items.Add(listViewItem);
 

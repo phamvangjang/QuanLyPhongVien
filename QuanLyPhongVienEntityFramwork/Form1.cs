@@ -20,7 +20,6 @@ namespace QuanLyPhongVienEntityFramwork
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            /*
             // Hiển thị hộp thoại xác nhận
             DialogResult result = MessageBox.Show("Bạn có muốn đóng ứng dụng không?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -28,7 +27,6 @@ namespace QuanLyPhongVienEntityFramwork
             {
                 e.Cancel = true; // Ngăn chặn việc đóng ứng dụng nếu người dùng không đồng ý.
             }
-            */
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -47,7 +45,7 @@ namespace QuanLyPhongVienEntityFramwork
                 tn = DateTime.Now.Year - pv.ngayVL.Value.Year;
                 if (tn >= 5)
                 {
-                    listViewItem.BackColor = Color.Yellow;
+                    listViewItem.BackColor = Color.LightGoldenrodYellow;
                 }
                 listViewItem.SubItems.Add(pv.tenPV);
 
@@ -173,7 +171,7 @@ namespace QuanLyPhongVienEntityFramwork
                     listViewItem.Selected = true;
                     if (tn>=5)
                     {
-                        listViewItem.BackColor = Color.Yellow;
+                        listViewItem.BackColor = Color.LightGoldenrodYellow;
                     }
                 }
             }

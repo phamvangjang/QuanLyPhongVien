@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace QuanLyPhongVien
 {
@@ -30,14 +31,14 @@ namespace QuanLyPhongVien
 
         public bool LuuPVTS(PVToaSoan ts)
         {
-            string sql = "INSERT INTO PhongVien(maPV, tenPV, GT, soDT, ngayVL, gioLT, loaiPV)" + "VALUES ( @maPV, @tenPV, @GT, @soDT, @ngayVL, @gioLT, @loaiPV )";
-            Object[] prms = new object[] { ts.id, ts.name, ts.gender, ts.phone, ts.dayWork, ts.LamThemGio, ts.LoaiPV };
+            string sql = "INSERT INTO PhongVien(maPV, tenPV, GT, soDT, ngayVL, gioLT, loaiPV, Luong)" + "VALUES ( @maPV, @tenPV, @GT, @soDT, @ngayVL, @gioLT, @loaiPV, @Luong )";
+            Object[] prms = new object[] { ts.id, ts.name, ts.gender, ts.phone, ts.dayWork, ts.LamThemGio, ts.LoaiPV, ts.Luong };
             return DataProvider.Instance.execNonSql(sql, prms) > 0;
         }
         public bool LuuPVTT(PVTT tt)
         {
-            string sql = "INSERT INTO PhongVien(maPV, tenPV, GT, soDT, ngayVL, PC, loaiPV)" + "VALUES ( @maPV, @tenPV, @GT, @soDT, @ngayVL, @PC, @loaiPV )";
-            Object[] prms = new object[] { tt.id, tt.name, tt.gender, tt.phone, tt.dayWork, tt.PhuCap, tt.LoaiPV };
+            string sql = "INSERT INTO PhongVien(maPV, tenPV, GT, soDT, ngayVL, PC, loaiPV, Luong)" + "VALUES ( @maPV, @tenPV, @GT, @soDT, @ngayVL, @PC, @loaiPV, @Luong )";
+            Object[] prms = new object[] { tt.id, tt.name, tt.gender, tt.phone, tt.dayWork, tt.PhuCap, tt.LoaiPV, tt.Luong };
             return DataProvider.Instance.execNonSql(sql, prms) > 0;
         }
 
@@ -50,35 +51,36 @@ namespace QuanLyPhongVien
             return DataProvider.Instance.execSql(query);
         }
 
-        public bool XoaThongtinTheoMaDon(string delid)
+        public bool XoaThongtinTheoMaDon(string madon)
         {
             try
             {
-                string query = $"DELETE FROM PhongVien WHERE MaDon = '{delid}'";
+                string query = $"DELETE FROM PhongVien WHERE MaPV = '{madon}'";
                 int affectedRows = DataProvider.Instance.execNonSql(query);
 
                 // Kiểm tra số dòng bị ảnh hưởng, nếu lớn hơn 0, xóa thành công
                 return affectedRows > 0;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
+                MessageBox.Show("Không xóa được phóng viên: ", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
 
         public bool SuaPVTS(PVToaSoan suapvts, string madon)
         {
-            string query = "UPDATE PhongVien SET tenPV = @tenPV, GT = @GT, soDT = @soDT, ngayVL = @ngayVL, gioLT = @gioLT, loaiPV = @loaiPV" +
+            string query = "UPDATE PhongVien SET tenPV = @tenPV, GT = @GT, soDT = @soDT, ngayVL = @ngayVL, PC = @PC, gioLT = @gioLT, loaiPV = @loaiPV" +
                 " WHERE maPV = @maPV";
-            object[] prms = new object[] { suapvts.name, suapvts.gender, suapvts.phone, suapvts.dayWork, suapvts.LamThemGio, suapvts.LoaiPV, madon };
+            object[] prms = new object[] { suapvts.name, suapvts.gender, suapvts.phone, suapvts.dayWork, "", suapvts.LamThemGio, suapvts.LoaiPV, madon };
             return DataProvider.Instance.execNonSql(query, prms) > 0;
         }
 
         public bool SuaPVTT(PVTT suapvtt, string madon)
         {
-            string query = "UPDATE PhongVien SET tenPV = @tenPV, GT = @GT, soDT = @soDT, ngayVL = @ngayVL, PC = @PC, loaiPV = @loaiPV" +
+            string query = "UPDATE PhongVien SET tenPV = @tenPV, GT = @GT, soDT = @soDT, ngayVL = @ngayVL, PC = @PC, gioLT = @gioLT, loaiPV = @loaiPV" +
                 " WHERE maPV = @maPV";
-            object[] prms = new object[] { suapvtt.name, suapvtt.gender, suapvtt.phone, suapvtt.dayWork, suapvtt.PhuCap, suapvtt.LoaiPV, madon };
+            object[] prms = new object[] { suapvtt.name, suapvtt.gender, suapvtt.phone, suapvtt.dayWork, suapvtt.PhuCap, "", suapvtt.LoaiPV, madon };
             return DataProvider.Instance.execNonSql(query, prms) > 0;
         }
 
