@@ -147,18 +147,12 @@ namespace QuanLyPhongVien
                 if (pv.LoaiPV == "ThuongTru")
                 {
                     rdbtnTT.Checked = true;
-                    lblSogioLT.Visible = false;
-                    txtGioLT.Visible = false;
-                    rdbtnToasoan.Checked = false;
                     lblPC.Visible = true;
                     txtPC.Visible = true;
                     txtPC.Text = pv.PhuCap.ToString();
                 }
                 else if (pv.LoaiPV == "ToaSoan")
                 {
-                    lblPC.Visible = false;
-                    txtPC.Visible = false;
-                    rdbtnTT.Checked = false;
                     rdbtnToasoan.Checked = true;
                     lblSogioLT.Visible = true;
                     txtGioLT.Visible = true;
