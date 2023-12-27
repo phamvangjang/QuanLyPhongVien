@@ -29,16 +29,10 @@ namespace QuanLyPhongVien
             return DataProvider.Instance.execSql(sql);
         }
 
-        public bool LuuPVTS(PVToaSoan ts)
+        public bool LuuPVTS(Phongvien ts)
         {
-            string sql = "INSERT INTO PhongVien(maPV, tenPV, GT, soDT, ngayVL, gioLT, loaiPV, Luong)" + "VALUES ( @maPV, @tenPV, @GT, @soDT, @ngayVL, @gioLT, @loaiPV, @Luong )";
-            Object[] prms = new object[] { ts.id, ts.name, ts.gender, ts.phone, ts.dayWork, ts.LamThemGio, ts.LoaiPV, ts.Luong };
-            return DataProvider.Instance.execNonSql(sql, prms) > 0;
-        }
-        public bool LuuPVTT(PVTT tt)
-        {
-            string sql = "INSERT INTO PhongVien(maPV, tenPV, GT, soDT, ngayVL, PC, loaiPV, Luong)" + "VALUES ( @maPV, @tenPV, @GT, @soDT, @ngayVL, @PC, @loaiPV, @Luong )";
-            Object[] prms = new object[] { tt.id, tt.name, tt.gender, tt.phone, tt.dayWork, tt.PhuCap, tt.LoaiPV, tt.Luong };
+            string sql = "INSERT INTO PhongVien(maPV, tenPV, GT, soDT, ngayVL, PC, gioLT, loaiPV, Luong)" + "VALUES ( @maPV, @tenPV, @GT, @soDT, @ngayVL, @PC, @gioLT, @loaiPV, @Luong )";
+            Object[] prms = new object[] { ts.id, ts.name, ts.gender, ts.phone, ts.dayWork, ts.PhuCap, ts.LamThemGio, ts.LoaiPV, ts.Luong };
             return DataProvider.Instance.execNonSql(sql, prms) > 0;
         }
 
@@ -68,19 +62,11 @@ namespace QuanLyPhongVien
             }
         }
 
-        public bool SuaPVTS(PVToaSoan suapvts, string madon)
+        public bool SuaPVTS(Phongvien suapvts, string madon)
         {
             string query = "UPDATE PhongVien SET tenPV = @tenPV, GT = @GT, soDT = @soDT, ngayVL = @ngayVL, PC = @PC, gioLT = @gioLT, loaiPV = @loaiPV, Luong = @Luong" +
                 " WHERE maPV = @maPV";
-            object[] prms = new object[] { suapvts.name, suapvts.gender, suapvts.phone, suapvts.dayWork, "", suapvts.LamThemGio, suapvts.LoaiPV, suapvts.Luong, madon };
-            return DataProvider.Instance.execNonSql(query, prms) > 0;
-        }
-
-        public bool SuaPVTT(PVTT suapvtt, string madon)
-        {
-            string query = "UPDATE PhongVien SET tenPV = @tenPV, GT = @GT, soDT = @soDT, ngayVL = @ngayVL, PC = @PC, gioLT = @gioLT, loaiPV = @loaiPV, Luong = @Luong" +
-                " WHERE maPV = @maPV";
-            object[] prms = new object[] { suapvtt.name, suapvtt.gender, suapvtt.phone, suapvtt.dayWork, suapvtt.PhuCap, "", suapvtt.LoaiPV, suapvtt.Luong, madon };
+            object[] prms = new object[] { suapvts.name, suapvts.gender, suapvts.phone, suapvts.dayWork, suapvts.PhuCap, suapvts.LamThemGio, suapvts.LoaiPV, suapvts.Luong, madon };
             return DataProvider.Instance.execNonSql(query, prms) > 0;
         }
 

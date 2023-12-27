@@ -44,91 +44,60 @@ namespace QuanLyPhongVien
 
         public void Luu(ListView lv)
         {
-            PVToaSoan pVToaSoan = new PVToaSoan();
+            Phongvien p = new Phongvien();
             PVTT pVTT = new PVTT();
             Form1 form1 = Application.OpenForms.OfType<Form1>().FirstOrDefault();
             if (form1 != null)
             {
+                string gt = "";
+                if (form1.rdbtnNam.Checked)
+                {
+                    gt = "Nam";
+                }
+                else if (form1.rdbtnNu.Checked)
+                {
+                    gt = "Nữ";
+                }
+                //show to listview
+                string ngayvl = form1.dtNVL.Value.ToShortDateString();
+                ListViewItem listViewItem = new ListViewItem(form1.txtMaPV.Text);
+                listViewItem.SubItems.Add(form1.txtHoTen.Text);
+                listViewItem.SubItems.Add(gt);
+                listViewItem.SubItems.Add(ngayvl);
+
+                //save info form object
+                p.id = form1.txtMaPV.Text;
+                p.name = form1.txtHoTen.Text;
+                p.phone = form1.txtDienthoai.Text;
+                p.gender = gt;
+                p.dayWork = DateTime.Parse(ngayvl);
+                TimeSpan thamnien = DateTime.Now - DateTime.Parse(ngayvl);
+                int thamNienNgay = (int)thamnien.TotalDays;
+                int tn = thamNienNgay / 365;
+
+                //hight light tn
+                if (tn > 5)
+                {
+                    listViewItem.BackColor = Color.LightGoldenrodYellow;
+                }
+                form1.lvDSPV.Items.Add(listViewItem);
+
                 if (form1.rdbtnToasoan.Checked)
                 {
-                    string gt = "";
-                    if (form1.rdbtnNam.Checked)
-                    {
-                        gt = "Nam";
-                    }
-                    else if (form1.rdbtnNu.Checked)
-                    {
-                        gt = "Nữ";
-                    }
-                    string ngayvl = form1.dtNVL.Value.ToShortDateString();
-                    ListViewItem listViewItem = new ListViewItem(form1.txtMaPV.Text);
-                    listViewItem.SubItems.Add(form1.txtHoTen.Text);
-                    listViewItem.SubItems.Add(gt);
-                    listViewItem.SubItems.Add(ngayvl);
-
-                    pVToaSoan.id = form1.txtMaPV.Text;
-                    pVToaSoan.name = form1.txtHoTen.Text;
-                    pVToaSoan.phone = form1.txtDienthoai.Text;
-                    pVToaSoan.gender = gt;
-                    pVToaSoan.dayWork = DateTime.Parse(ngayvl);
-                    pVToaSoan.Luong = 12000000 + (float)1.5 * 100000 * float.Parse(form1.txtGioLT.Text);
-                    TimeSpan thamnien = DateTime.Now - DateTime.Parse(ngayvl);
-                    int thamNienNgay = (int)thamnien.TotalDays;
-                    int tn = thamNienNgay / 365;
-
-                    string loaipv = "ToaSoan";
-                    pVToaSoan.LoaiPV = loaipv;
-                    pVToaSoan.LamThemGio = int.Parse(form1.txtGioLT.Text);
-
-                    if (tn>5)
-                    {
-                        listViewItem.BackColor = Color.LightGoldenrodYellow;
-                    }
-                    form1.lvDSPV.Items.Add(listViewItem);
-
-                    DAO.Instance.LuuPVTS(pVToaSoan);
-                    MessageBox.Show("Đã thêm phóng viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    p.LoaiPV = "ToaSoan";
+                    p.LamThemGio = int.Parse(form1.txtGioLT.Text);
+                    p.Luong = 12000000 + (float)1.5 * 100000 * float.Parse(form1.txtGioLT.Text);
+                    p.PhuCap = 0;
                 }
                 else if (form1.rdbtnTT.Checked)
                 {
-                    string gt = "";
-                    if (form1.rdbtnNam.Checked)
-                    {
-                        gt = "Nam";
-                    }
-                    else if (form1.rdbtnNu.Checked)
-                    {
-                        gt = "Nữ";
-                    }
-                    string ngayvl = form1.dtNVL.Value.ToShortDateString();
-                    ListViewItem listViewItem = new ListViewItem(form1.txtMaPV.Text);
-                    listViewItem.SubItems.Add(form1.txtHoTen.Text);
-                    listViewItem.SubItems.Add(gt);
-                    listViewItem.SubItems.Add(ngayvl);
-
-                    pVTT.id = form1.txtMaPV.Text;
-                    pVTT.name = form1.txtHoTen.Text;
-                    pVTT.phone = form1.txtDienthoai.Text;
-                    pVTT.gender = gt;
-                    pVTT.dayWork = DateTime.Parse(ngayvl);
-                    pVTT.Luong = 12000000 + float.Parse(form1.txtPC.Text);
-                    TimeSpan thamnien = DateTime.Now - DateTime.Parse(ngayvl);
-                    int thamNienNgay = (int)thamnien.TotalDays;
-                    int tn = thamNienNgay / 365;
-
-                    string loaipv = "ThuongTru";
-                    pVTT.LoaiPV = loaipv;
-                    pVTT.PhuCap = float.Parse(form1.txtPC.Text);
-
-                    if (tn > 5)
-                    {
-                        listViewItem.BackColor = Color.LightGoldenrodYellow;
-                    }
-                    form1.lvDSPV.Items.Add(listViewItem);
-
-                    DAO.Instance.LuuPVTT(pVTT);
-                    MessageBox.Show("Đã thêm phóng viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    p.LoaiPV = "ThuongTru";
+                    p.PhuCap = float.Parse(form1.txtPC.Text);
+                    p.Luong = 12000000 + float.Parse(form1.txtPC.Text);
+                    p.LamThemGio = 0;
                 }
+                DAO.Instance.LuuPVTS(p);
+                MessageBox.Show("Đã thêm phóng viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -143,7 +112,7 @@ namespace QuanLyPhongVien
                 pv.gender = dataRow[2].ToString();
                 pv.phone = dataRow[3].ToString();
                 pv.dayWork = DateTime.Parse(dataRow[4].ToString());
-                if (dataRow[5].ToString() != "")
+                if (dataRow[7].ToString() == "ThuongTru")
                 {
                     pv.PhuCap = float.Parse(dataRow[5].ToString());
                     pv.LamThemGio = 0;
@@ -154,6 +123,7 @@ namespace QuanLyPhongVien
                     pv.PhuCap = 0;
                 }
                 pv.LoaiPV = dataRow[7].ToString();
+                pv.Luong = float.Parse(dataRow[8].ToString());
             }
             return pv;
         }
@@ -165,7 +135,7 @@ namespace QuanLyPhongVien
 
         public void Sua(ListView listView)
         {
-            PVToaSoan ts = new PVToaSoan();
+            Phongvien ts = new Phongvien();
             PVTT tt = new PVTT();
             Form1 form1 = Application.OpenForms.OfType<Form1>().FirstOrDefault();
             if (form1.lvDSPV.SelectedItems.Count > 0)
@@ -174,6 +144,7 @@ namespace QuanLyPhongVien
                 if (!string.IsNullOrEmpty(madon))
                 {
                     string gt = "";
+                    string nvl = form1.dtNVL.Value.ToShortDateString();
                     if (form1.rdbtnNam.Checked)
                     {
                         gt = "Nam";
@@ -182,33 +153,28 @@ namespace QuanLyPhongVien
                     {
                         gt = "Nữ";
                     }
-                    string nvl = form1.dtNVL.Value.ToShortDateString();
+                    ts.id = form1.txtMaPV.Text;
+                    ts.name = form1.txtHoTen.Text;
+                    ts.gender = gt;
+                    ts.phone = form1.txtDienthoai.Text;
+                    ts.dayWork = DateTime.Parse(nvl);
+                    
                     if (form1.rdbtnToasoan.Checked)
                     {
-                        ts.id = form1.txtMaPV.Text;
-                        ts.name = form1.txtHoTen.Text;
-                        ts.gender = gt;
-                        ts.phone = form1.txtDienthoai.Text;
-                        ts.dayWork = DateTime.Parse(nvl);
-                        ts.LamThemGio = int.Parse(form1.txtGioLT.Text);
                         ts.LoaiPV = "ToaSoan";
+                        ts.LamThemGio = int.Parse(form1.txtGioLT.Text);
                         ts.Luong = 12000000 + (float)1.5 * 100000 * float.Parse(form1.txtGioLT.Text);
-                        DAO.Instance.SuaPVTS(ts, madon);
-                        MessageBox.Show("Dữ liệu đã được sửa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        ts.PhuCap = 0;
                     }
                     else if (form1.rdbtnTT.Checked)
                     {
-                        tt.id = form1.txtMaPV.Text;
-                        tt.name = form1.txtHoTen.Text;
-                        tt.gender = gt;
-                        tt.phone = form1.txtDienthoai.Text;
-                        tt.dayWork = DateTime.Parse(nvl);
-                        tt.PhuCap = float.Parse(form1.txtPC.Text);
-                        tt.LoaiPV = "ToaSoan";
-                        tt.Luong = 12000000 + float.Parse(form1.txtPC.Text);
-                        DAO.Instance.SuaPVTT(tt, madon);
-                        MessageBox.Show("Dữ liệu đã được sửa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        ts.LoaiPV = "ThuongTru";
+                        ts.PhuCap = float.Parse(form1.txtPC.Text);
+                        ts.Luong = 12000000 + float.Parse(form1.txtPC.Text);
+                        ts.LamThemGio = 0;
                     }
+                    DAO.Instance.SuaPVTS(ts, madon);
+                    MessageBox.Show("Dữ liệu đã được sửa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             else

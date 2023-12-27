@@ -31,9 +31,7 @@ namespace QuanLyPhongVien
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            rdbtnNam.Checked = true;
-            rdbtnToasoan.Checked = true;
-            dtNVL.Value = DateTime.Now;
+            Reset();
             Bussiness.Instance.Xem(lvDSPV);
         }
 
@@ -134,6 +132,7 @@ namespace QuanLyPhongVien
                 // Gọi phương thức trong Bussiness để lấy thông tin chi tiết từ cơ sở dữ liệu
                 Phongvien pv = Bussiness.Instance.LayThongTinPhongVienTheoMaDon(maDon);
                 txtMaPV.Text = pv.id.ToString();
+                txtMaPV.Enabled = false;
                 txtHoTen.Text = pv.name.ToString();
                 txtDienthoai.Text = pv.phone.ToString();
                 if (pv.gender == "Nam")
@@ -144,18 +143,18 @@ namespace QuanLyPhongVien
                 {
                     rdbtnNu.Checked = true;
                 }
-                dtNVL.Text = pv.dayWork.Date.ToString();
-                if (pv.LamThemGio == 0)
+                dtNVL.Text = pv.dayWork.Date.ToShortDateString();
+                if (pv.LoaiPV == "ThuongTru")
                 {
+                    rdbtnTT.Checked = true;
                     lblSogioLT.Visible = false;
                     txtGioLT.Visible = false;
-                    rdbtnTT.Checked = true;
                     rdbtnToasoan.Checked = false;
                     lblPC.Visible = true;
                     txtPC.Visible = true;
                     txtPC.Text = pv.PhuCap.ToString();
                 }
-                else if (pv.PhuCap == 0)
+                else if (pv.LoaiPV == "ToaSoan")
                 {
                     lblPC.Visible = false;
                     txtPC.Visible = false;
