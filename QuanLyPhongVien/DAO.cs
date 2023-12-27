@@ -70,17 +70,17 @@ namespace QuanLyPhongVien
 
         public bool SuaPVTS(PVToaSoan suapvts, string madon)
         {
-            string query = "UPDATE PhongVien SET tenPV = @tenPV, GT = @GT, soDT = @soDT, ngayVL = @ngayVL, PC = @PC, gioLT = @gioLT, loaiPV = @loaiPV" +
+            string query = "UPDATE PhongVien SET tenPV = @tenPV, GT = @GT, soDT = @soDT, ngayVL = @ngayVL, PC = @PC, gioLT = @gioLT, loaiPV = @loaiPV, Luong = @Luong" +
                 " WHERE maPV = @maPV";
-            object[] prms = new object[] { suapvts.name, suapvts.gender, suapvts.phone, suapvts.dayWork, "", suapvts.LamThemGio, suapvts.LoaiPV, madon };
+            object[] prms = new object[] { suapvts.name, suapvts.gender, suapvts.phone, suapvts.dayWork, "", suapvts.LamThemGio, suapvts.LoaiPV, suapvts.Luong, madon };
             return DataProvider.Instance.execNonSql(query, prms) > 0;
         }
 
         public bool SuaPVTT(PVTT suapvtt, string madon)
         {
-            string query = "UPDATE PhongVien SET tenPV = @tenPV, GT = @GT, soDT = @soDT, ngayVL = @ngayVL, PC = @PC, gioLT = @gioLT, loaiPV = @loaiPV" +
+            string query = "UPDATE PhongVien SET tenPV = @tenPV, GT = @GT, soDT = @soDT, ngayVL = @ngayVL, PC = @PC, gioLT = @gioLT, loaiPV = @loaiPV, Luong = @Luong" +
                 " WHERE maPV = @maPV";
-            object[] prms = new object[] { suapvtt.name, suapvtt.gender, suapvtt.phone, suapvtt.dayWork, suapvtt.PhuCap, "", suapvtt.LoaiPV, madon };
+            object[] prms = new object[] { suapvtt.name, suapvtt.gender, suapvtt.phone, suapvtt.dayWork, suapvtt.PhuCap, "", suapvtt.LoaiPV, suapvtt.Luong, madon };
             return DataProvider.Instance.execNonSql(query, prms) > 0;
         }
 

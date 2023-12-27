@@ -40,9 +40,8 @@ namespace QuanLyPhongVienEntityFramwork
             lvDSPV.Items.Clear();
             foreach (var pv in p)
             {
-                int tn = 0;
                 ListViewItem listViewItem = new ListViewItem(pv.maPV);
-                tn = DateTime.Now.Year - pv.ngayVL.Value.Year;
+                int tn = DateTime.Now.Year - pv.ngayVL.Value.Year;
                 if (tn >= 5)
                 {
                     listViewItem.BackColor = Color.LightGoldenrodYellow;
@@ -104,7 +103,7 @@ namespace QuanLyPhongVienEntityFramwork
             txtMaPV.Focus();
         }
 
-        private bool Validate()
+        private new bool Validate()
         {
             if (string.IsNullOrEmpty(txtMaPV.Text) || string.IsNullOrEmpty(txtHoTen.Text) || string.IsNullOrEmpty(txtMaPV.Text) || string.IsNullOrEmpty(txtDienthoai.Text) || (string.IsNullOrEmpty(txtGioLT.Text)&&rdbtnToasoan.Checked) || (string.IsNullOrEmpty(txtPC.Text) && rdbtnTT.Checked))
             {

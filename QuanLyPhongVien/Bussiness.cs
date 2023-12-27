@@ -192,6 +192,7 @@ namespace QuanLyPhongVien
                         ts.dayWork = DateTime.Parse(nvl);
                         ts.LamThemGio = int.Parse(form1.txtGioLT.Text);
                         ts.LoaiPV = "ToaSoan";
+                        ts.Luong = 12000000 + (float)1.5 * 100000 * float.Parse(form1.txtGioLT.Text);
                         DAO.Instance.SuaPVTS(ts, madon);
                         MessageBox.Show("Dữ liệu đã được sửa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
@@ -204,6 +205,7 @@ namespace QuanLyPhongVien
                         tt.dayWork = DateTime.Parse(nvl);
                         tt.PhuCap = float.Parse(form1.txtPC.Text);
                         tt.LoaiPV = "ToaSoan";
+                        tt.Luong = 12000000 + float.Parse(form1.txtPC.Text);
                         DAO.Instance.SuaPVTT(tt, madon);
                         MessageBox.Show("Dữ liệu đã được sửa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
@@ -224,6 +226,14 @@ namespace QuanLyPhongVien
                 item.SubItems.Add(rows["tenPV"].ToString());
                 item.SubItems.Add(rows["GT"].ToString());
                 item.SubItems.Add(rows["ngayVL"].ToString());
+
+                TimeSpan thamnien = DateTime.Now - DateTime.Parse(rows["ngayVL"].ToString());
+                int thamNienNgay = (int)thamnien.TotalDays;
+                int tn = thamNienNgay / 365;
+                if (tn > 5)
+                {
+                    item.BackColor = Color.LightGoldenrodYellow;
+                }
                 listView.Items.Add(item);
             }
             MessageBox.Show("Đã sắp xếp phóng viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -240,10 +250,10 @@ namespace QuanLyPhongVien
             int slts = dataRow2.Field<int>("TongSoLuong");
             int tglt = dataRow2.Field<int>("TongGioLamThem");
 
-            MessageBox.Show("Số lượng phóng viên toà soạn: " + slts + " (phong vien)\n" +
-                            "Lương chi cho phóng viên tòa soạn: " + ((tglt * 100000 * 1.5) + (slts * 12000000)) + " (VND)\n" +
-                            "Số lượng phóng viên thường trú: " + sltt + "(phong vien)\n" +
-                            "Lương chi cho phóng viên thường trú: " + ((tpc) + (sltt * 12000000)) + " (VND)\n",
+            MessageBox.Show("Phóng viên toà soạn: " + slts + " (pv)\n" +
+                            "Lương chi: " + ((tglt * 100000 * 1.5) + (slts * 12000000)) + " (VND)\n" +
+                            "Phóng viên thường trú: " + sltt + "(pv)\n" +
+                            "Lương chi: " + ((tpc) + (sltt * 12000000)) + " (VND)\n",
                             "Thống kê", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 

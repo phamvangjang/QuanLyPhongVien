@@ -18,11 +18,6 @@ namespace QuanLyPhongVien
             InitializeComponent();
         }
 
-        private void grbTTPV_Enter(object sender, EventArgs e)
-        {
-
-        }
-
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             // Hiển thị hộp thoại xác nhận
@@ -87,39 +82,43 @@ namespace QuanLyPhongVien
             Reset();
         }
 
-        public bool Validate()
+        public new bool Validate
         {
-            // Kiểm tra thông tin có hợp lệ
-            if (string.IsNullOrEmpty(txtMaPV.Text) || string.IsNullOrEmpty(txtHoTen.Text) || string.IsNullOrEmpty(txtDienthoai.Text))
+            get
             {
-                MessageBox.Show("Thông tin không được để trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                // Kiểm tra thông tin có hợp lệ
+                if (string.IsNullOrEmpty(txtMaPV.Text) || string.IsNullOrEmpty(txtHoTen.Text) || string.IsNullOrEmpty(txtDienthoai.Text))
+                {
+                    MessageBox.Show("Thông tin không được để trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                if (dtNVL.Value > DateTime.Now)
+                {
+                    MessageBox.Show("Ngày vào làm không được lớn hơn ngày hiện tại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                if (txtDienthoai.Text.Any(n => !char.IsDigit(n)) || txtDienthoai.Text.Length != 10)
+                {
+                    MessageBox.Show("Số điện thoại phải là một dãy số và có 10 chữ số!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                if (txtGioLT.Text.Any(n => !char.IsDigit(n)) && rdbtnToasoan.Checked)
+                {
+                    MessageBox.Show("Giờ làm thêm phải là số dương!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                if (txtPC.Text.Any(n => !char.IsDigit(n)) && rdbtnTT.Checked)
+                {
+                    MessageBox.Show("Phụ cấp phải là số dương!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                return true;
             }
-            if (dtNVL.Value > DateTime.Now)
-            {
-                MessageBox.Show("Ngày vào làm không được lớn hơn ngày hiện tại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-            if (txtDienthoai.Text.Any(n => !char.IsDigit(n)) || txtDienthoai.Text.Length != 10)
-            {
-                MessageBox.Show("Số điện thoại phải là một dãy số và có 10 chữ số!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-            if (txtGioLT.Text.Any(n => !char.IsDigit(n)) && rdbtnToasoan.Checked)
-            {
-                MessageBox.Show("Giờ làm thêm phải là số dương!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-            if (txtPC.Text.Any(n => !char.IsDigit(n)) && rdbtnTT.Checked)
-            {
-                MessageBox.Show("Phụ cấp phải là số dương!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-            return true;
         }
+
         private void btnLuu_Click(object sender, EventArgs e)
         {
-            if (Validate())
+            if (Validate)
             {
                 Bussiness.Instance.Luu(lvDSPV);
             }
@@ -220,9 +219,12 @@ namespace QuanLyPhongVien
 
         private void btnSua_Click(object sender, EventArgs e)
         {
-            Bussiness.Instance.Sua(lvDSPV);
-            lvDSPV.Items.Clear();
-            Bussiness.Instance.Xem(lvDSPV);
+            if (Validate)
+            {
+                Bussiness.Instance.Sua(lvDSPV);
+                lvDSPV.Items.Clear();
+                Bussiness.Instance.Xem(lvDSPV);
+            }
         }
 
         private void btnSapXep_Click(object sender, EventArgs e)

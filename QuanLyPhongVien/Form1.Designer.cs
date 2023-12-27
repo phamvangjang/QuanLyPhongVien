@@ -105,7 +105,6 @@
             this.grbTTPV.TabIndex = 1;
             this.grbTTPV.TabStop = false;
             this.grbTTPV.Text = "Thông tin phóng viên ";
-            this.grbTTPV.Enter += new System.EventHandler(this.grbTTPV_Enter);
             // 
             // dtNVL
             // 
