@@ -77,6 +77,7 @@ namespace QuanLyPhongVien
 
         private void btnThem_Click(object sender, EventArgs e)
         {
+            txtMaPV.Enabled = true;
             Reset();
         }
 

@@ -56,7 +56,7 @@ namespace QuanLyPhongVienEntityFramwork
                 {
                     listViewItem.SubItems.Add(pv.GT);
                 }
-                listViewItem.SubItems.Add(pv.ngayVL.ToString());
+                listViewItem.SubItems.Add(pv.ngayVL.Value.ToString("dd/MM/yyyy"));
 
                 lvDSPV.Items.Add(listViewItem);
             }
@@ -100,6 +100,7 @@ namespace QuanLyPhongVienEntityFramwork
         private void btnThem_Click(object sender, EventArgs e)
         {
             Reset();
+            txtMaPV.Enabled = true;
             txtMaPV.Focus();
         }
 
@@ -137,15 +138,19 @@ namespace QuanLyPhongVienEntityFramwork
         {
             if (Validate())
             {
-                float salary = 12000000;
+                float salary = 0;
+                int giolt = 0;
+                float pc = 0;
                 bool a = _db.PhongViens.Any(b => b.maPV == txtMaPV.Text);
                 if (rdbtnToasoan.Checked)
                 {
-                    salary += float.Parse(txtGioLT.Text) * 100000 * (float)1.5;
+                    salary +=(12000000 + float.Parse(txtGioLT.Text) * 100000 * (float)1.5);
+                    giolt = int.Parse(txtGioLT.Text);
                 }
                 else
                 {
-                    salary += float.Parse(txtPC.Text);
+                    salary +=(12000000+ float.Parse(txtPC.Text));
+                    pc = float.Parse(txtPC.Text);
                 }
                 if (a)
                 {
@@ -154,7 +159,7 @@ namespace QuanLyPhongVienEntityFramwork
                 else
                 {
                     //save to db
-                    _db.PhongViens.Add(new PhongVien() { maPV = txtMaPV.Text, tenPV=txtHoTen.Text, soDT=txtDienthoai.Text, GT=rdbtnNam.Checked? "Nam" : "Nữ", ngayVL=dtNVL.Value,loaiPV=rdbtnToasoan.Checked? "ToaSoan" : "ThuongTru", Luong=salary});
+                    _db.PhongViens.Add(new PhongVien() { maPV = txtMaPV.Text, tenPV=txtHoTen.Text, GT = rdbtnNam.Checked ? "Nam" : "Nữ", soDT=txtDienthoai.Text, ngayVL=dtNVL.Value,loaiPV=rdbtnToasoan.Checked? "ToaSoan" : "ThuongTru", gioLT=giolt, PC=pc, Luong=salary});
                     _db.SaveChanges();
 
                     //show to listview
@@ -197,19 +202,19 @@ namespace QuanLyPhongVienEntityFramwork
                     {
                         rdbtnNu.Checked = true;
                     }
-                    dtNVL.Value = pv.ngayVL.Value;
                     txtDienthoai.Text=pv.soDT.Trim() ;
+                    dtNVL.Value = pv.ngayVL.Value;
                     if (pv.loaiPV=="ToaSoan")
                     {
                         rdbtnToasoan.Checked = true;
-                        float lt = ((float)(pv.Luong - 12000000) / (100000 * (float)1.5));
-                        txtGioLT.Text = lt.ToString();
+                        txtGioLT.Text = pv.gioLT.ToString();
+                        txtPC.Clear();
                     }
                     else if (pv.loaiPV=="ThuongTru")
                     {
                         rdbtnTT.Checked = true;
-                        double pc = ((double)(pv.Luong - 12000000)) ;
-                        txtPC.Text = pc.ToString().Trim();
+                        txtPC.Text = pv.PC.ToString().Trim();
+                        txtGioLT.Clear();
                     }
                 }
                 else
@@ -271,14 +276,18 @@ namespace QuanLyPhongVienEntityFramwork
                 string mpv = lvDSPV.SelectedItems[0].SubItems[0].Text.Trim();
 
                 PhongVien pv = _db.PhongViens.Where(p => p.maPV.Trim() == mpv).SingleOrDefault();
-                float l = 0;
+                float salary = 0;
+                int giolt = 0;
+                float pc = 0;
                 if (rdbtnToasoan.Checked)
                 {
-                    l += 12000000 + float.Parse(txtGioLT.Text) * 100000 * (float)1.5;
+                    salary += (12000000 + float.Parse(txtGioLT.Text) * 100000 * (float)1.5);
+                    giolt = int.Parse(txtGioLT.Text);
                 }
                 else
                 {
-                    l +=12000000 + float.Parse(txtPC.Text);
+                    salary += (12000000 + float.Parse(txtPC.Text));
+                    pc = float.Parse(txtPC.Text);
                 }
 
                 if (Validate())
@@ -288,12 +297,15 @@ namespace QuanLyPhongVienEntityFramwork
                     pv.soDT=txtDienthoai.Text;
                     pv.ngayVL = dtNVL.Value;
                     pv.loaiPV = rdbtnToasoan.Checked ? "ToaSoan" : "ThuongTru";
-                    pv.Luong = l;
+                    pv.gioLT = giolt;
+                    pv.PC = pc;
+                    pv.Luong = salary;
                     _db.SaveChanges();
                     txtMaPV.Enabled = true;
                     ResetListView(_db.PhongViens.ToList());
                     Reset();
                 }
+                MessageBox.Show("Đã sửa phóng viên thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Question);
             }
             else
             {
