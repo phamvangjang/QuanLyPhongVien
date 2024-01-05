@@ -62,7 +62,7 @@ namespace QuanLyPhongVien
             }
         }
 
-        public bool SuaPVTS(Phongvien suapvts, string madon)
+        public bool Sua(Phongvien suapvts, string madon)
         {
             string query = "UPDATE PhongVien SET tenPV = @tenPV, GT = @GT, soDT = @soDT, ngayVL = @ngayVL, PC = @PC, gioLT = @gioLT, loaiPV = @loaiPV, Luong = @Luong" +
                 " WHERE maPV = @maPV";
@@ -80,8 +80,8 @@ namespace QuanLyPhongVien
         {
             string query = $"SELECT loaiPV, " +
                 $"COUNT(*) AS TongSoLuong, " +
-                $"SUM(CASE WHEN loaiPV = 'ThuongTru' THEN PC ELSE 0 END) AS TongPhuCap,    " +
-                $"SUM(CASE WHEN loaiPV = 'ToaSoan' THEN gioLT ELSE 0 END) AS TongGioLamThem " +
+                $"SUM(CASE WHEN loaiPV = 'ThuongTru' THEN Luong ELSE 0 END) AS TongLuongChiTT,    " +
+                $"SUM(CASE WHEN loaiPV = 'ToaSoan' THEN Luong ELSE 0 END) AS TongLuongChiTS " +
                 $"FROM PhongVien " +
                 $"GROUP BY loaiPV;";
             return DataProvider.Instance.execSql(query);

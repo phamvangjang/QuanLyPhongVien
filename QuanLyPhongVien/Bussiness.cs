@@ -135,8 +135,7 @@ namespace QuanLyPhongVien
 
         public void Sua(ListView listView)
         {
-            Phongvien ts = new Phongvien();
-            PVTT tt = new PVTT();
+            Phongvien phongvien = new Phongvien();
             Form1 form1 = Application.OpenForms.OfType<Form1>().FirstOrDefault();
             if (form1.lvDSPV.SelectedItems.Count > 0)
             {
@@ -153,27 +152,27 @@ namespace QuanLyPhongVien
                     {
                         gt = "Nữ";
                     }
-                    ts.id = form1.txtMaPV.Text;
-                    ts.name = form1.txtHoTen.Text;
-                    ts.gender = gt;
-                    ts.phone = form1.txtDienthoai.Text;
-                    ts.dayWork = DateTime.Parse(nvl);
+                    phongvien.id = form1.txtMaPV.Text;
+                    phongvien.name = form1.txtHoTen.Text;
+                    phongvien.gender = gt;
+                    phongvien.phone = form1.txtDienthoai.Text;
+                    phongvien.dayWork = DateTime.Parse(nvl);
                     
                     if (form1.rdbtnToasoan.Checked)
                     {
-                        ts.LoaiPV = "ToaSoan";
-                        ts.LamThemGio = int.Parse(form1.txtGioLT.Text);
-                        ts.Luong = 12000000 + (float)1.5 * 100000 * float.Parse(form1.txtGioLT.Text);
-                        ts.PhuCap = 0;
+                        phongvien.LoaiPV = "ToaSoan";
+                        phongvien.LamThemGio = int.Parse(form1.txtGioLT.Text);
+                        phongvien.Luong = 12000000 + (float)1.5 * 100000 * float.Parse(form1.txtGioLT.Text);
+                        phongvien.PhuCap = 0;
                     }
                     else if (form1.rdbtnTT.Checked)
                     {
-                        ts.LoaiPV = "ThuongTru";
-                        ts.PhuCap = float.Parse(form1.txtPC.Text);
-                        ts.Luong = 12000000 + float.Parse(form1.txtPC.Text);
-                        ts.LamThemGio = 0;
+                        phongvien.LoaiPV = "ThuongTru";
+                        phongvien.PhuCap = float.Parse(form1.txtPC.Text);
+                        phongvien.Luong = 12000000 + float.Parse(form1.txtPC.Text);
+                        phongvien.LamThemGio = 0;
                     }
-                    DAO.Instance.SuaPVTS(ts, madon);
+                    DAO.Instance.Sua(phongvien, madon);
                     MessageBox.Show("Dữ liệu đã được sửa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
@@ -210,16 +209,16 @@ namespace QuanLyPhongVien
             DataTable dataTable = DAO.Instance.ThongKe();
             DataRow dataRow1 = dataTable.Rows[0];
             int sltt = dataRow1.Field<int>("TongSoLuong");
-            double tpc = dataRow1.Field<double>("TongPhuCap");
+            double luongtt = dataRow1.Field<double>("TongLuongChiTT");
 
             DataRow dataRow2 = dataTable.Rows[1];
             int slts = dataRow2.Field<int>("TongSoLuong");
-            int tglt = dataRow2.Field<int>("TongGioLamThem");
+            double luongts = dataRow2.Field<double>("TongLuongChiTS");
 
             MessageBox.Show("Phóng viên toà soạn: " + slts + " (pv)\n" +
-                            "Lương chi: " + ((tglt * 100000 * 1.5) + (slts * 12000000)) + " (VND)\n" +
+                            "Lương chi: " + luongts + " (VND)\n\n\n" +
                             "Phóng viên thường trú: " + sltt + "(pv)\n" +
-                            "Lương chi: " + ((tpc) + (sltt * 12000000)) + " (VND)\n",
+                            "Lương chi: " + luongtt + " (VND)\n",
                             "Thống kê", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 

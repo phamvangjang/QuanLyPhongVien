@@ -72,12 +72,12 @@ namespace QuanLyPhongVien
             dtNVL.Value = DateTime.Now;
 
             // Gán giá trị mặc định cho các TextBox nhập liệu
+            txtMaPV.Enabled = true;
             txtMaPV.Focus();
         }
 
         private void btnThem_Click(object sender, EventArgs e)
         {
-            txtMaPV.Enabled = true;
             Reset();
         }
 

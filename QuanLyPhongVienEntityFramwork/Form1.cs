@@ -77,6 +77,8 @@ namespace QuanLyPhongVienEntityFramwork
             rdbtnToasoan.Checked = true;
             txtGioLT.Clear();
             txtPC.Clear();
+            txtMaPV.Enabled = true;
+            txtMaPV.Focus();
         }
 
         private void rdbtnToasoan_CheckedChanged(object sender, EventArgs e)
@@ -100,8 +102,6 @@ namespace QuanLyPhongVienEntityFramwork
         private void btnThem_Click(object sender, EventArgs e)
         {
             Reset();
-            txtMaPV.Enabled = true;
-            txtMaPV.Focus();
         }
 
         private new bool Validate()
