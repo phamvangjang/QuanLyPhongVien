@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuanLyPhongVienEntityFramwork
@@ -41,13 +38,7 @@ namespace QuanLyPhongVienEntityFramwork
             foreach (var pv in p)
             {
                 ListViewItem listViewItem = new ListViewItem(pv.maPV);
-                int tn = DateTime.Now.Year - pv.ngayVL.Value.Year;
-                if (tn >= 5)
-                {
-                    listViewItem.BackColor = Color.LightGoldenrodYellow;
-                }
                 listViewItem.SubItems.Add(pv.tenPV);
-
                 if (pv.GT == "Nam")
                 {
                     listViewItem.SubItems.Add(pv.GT);
@@ -57,6 +48,12 @@ namespace QuanLyPhongVienEntityFramwork
                     listViewItem.SubItems.Add(pv.GT);
                 }
                 listViewItem.SubItems.Add(pv.ngayVL.Value.ToString("dd/MM/yyyy"));
+
+                int tn = DateTime.Now.Year - pv.ngayVL.Value.Year;
+                if (tn >= 5)
+                {
+                    listViewItem.BackColor = Color.LightGoldenrodYellow;
+                }
 
                 lvDSPV.Items.Add(listViewItem);
             }
@@ -106,22 +103,22 @@ namespace QuanLyPhongVienEntityFramwork
 
         private new bool Validate()
         {
-            if (string.IsNullOrEmpty(txtMaPV.Text) || string.IsNullOrEmpty(txtHoTen.Text) || string.IsNullOrEmpty(txtMaPV.Text) || string.IsNullOrEmpty(txtDienthoai.Text) || (string.IsNullOrEmpty(txtGioLT.Text)&&rdbtnToasoan.Checked) || (string.IsNullOrEmpty(txtPC.Text) && rdbtnTT.Checked))
+            if (string.IsNullOrEmpty(txtMaPV.Text) || string.IsNullOrEmpty(txtHoTen.Text) || string.IsNullOrEmpty(txtMaPV.Text) || string.IsNullOrEmpty(txtDienthoai.Text) || (string.IsNullOrEmpty(txtGioLT.Text) && rdbtnToasoan.Checked) || (string.IsNullOrEmpty(txtPC.Text) && rdbtnTT.Checked))
             {
                 MessageBox.Show("Thông tin không được để trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
-            if (dtNVL.Value>DateTime.Now)
+            if (dtNVL.Value > DateTime.Now)
             {
                 MessageBox.Show("Ngày vào làm không được lớn hơn ngày hiện tại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
-            if (txtDienthoai.Text.Any(n=>!char.IsDigit(n))||txtDienthoai.Text.Length!=10)
+            if (txtDienthoai.Text.Any(n => !char.IsDigit(n)) || txtDienthoai.Text.Length != 10)
             {
                 MessageBox.Show("Số điện thoại phải là một dãy số và có 10 chữ số!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
-            if (txtGioLT.Text.Any(n=>!char.IsDigit(n))&&rdbtnToasoan.Checked)
+            if (txtGioLT.Text.Any(n => !char.IsDigit(n)) && rdbtnToasoan.Checked)
             {
                 MessageBox.Show("Giờ làm thêm phải là số dương!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
@@ -144,12 +141,12 @@ namespace QuanLyPhongVienEntityFramwork
                 bool a = _db.PhongViens.Any(b => b.maPV == txtMaPV.Text);
                 if (rdbtnToasoan.Checked)
                 {
-                    salary +=(12000000 + float.Parse(txtGioLT.Text) * 100000 * (float)1.5);
+                    salary += (12000000 + float.Parse(txtGioLT.Text) * 100000 * (float)1.5);
                     giolt = int.Parse(txtGioLT.Text);
                 }
                 else
                 {
-                    salary +=(12000000+ float.Parse(txtPC.Text));
+                    salary += (12000000 + float.Parse(txtPC.Text));
                     pc = float.Parse(txtPC.Text);
                 }
                 if (a)
@@ -159,42 +156,29 @@ namespace QuanLyPhongVienEntityFramwork
                 else
                 {
                     //save to db
-                    _db.PhongViens.Add(new PhongVien() { maPV = txtMaPV.Text, tenPV=txtHoTen.Text, GT = rdbtnNam.Checked ? "Nam" : "Nữ", soDT=txtDienthoai.Text, ngayVL=dtNVL.Value,loaiPV=rdbtnToasoan.Checked? "ToaSoan" : "ThuongTru", gioLT=giolt, PC=pc, Luong=salary});
+                    _db.PhongViens.Add(new PhongVien() { maPV = txtMaPV.Text, tenPV = txtHoTen.Text, GT = rdbtnNam.Checked ? "Nam" : "Nữ", soDT = txtDienthoai.Text, ngayVL = dtNVL.Value, loaiPV = rdbtnToasoan.Checked ? "ToaSoan" : "ThuongTru", gioLT = giolt, PC = pc, Luong = salary });
                     _db.SaveChanges();
 
-                    //show to listview
-                    ListViewItem listViewItem= new ListViewItem(txtMaPV.Text);
-                    listViewItem.SubItems.Add(txtHoTen.Text);
-                    listViewItem.SubItems.Add(rdbtnNam.Checked?rdbtnNam.Text:rdbtnNu.Text);
-                    listViewItem.SubItems.Add(dtNVL.Value.ToString("dd/MM/yyyy"));
-
-                    //hight light listviewitem 
-                    int tn = DateTime.Now.Year - dtNVL.Value.Year;
-                    lvDSPV.Items.Add(listViewItem);
-
-                    listViewItem.Selected = true;
-                    if (tn>=5)
-                    {
-                        listViewItem.BackColor = Color.LightGoldenrodYellow;
-                    }
+                    //ResetListView
+                    ResetListView(_db.PhongViens.ToList());
                 }
             }
         }
 
         private void lvDSPV_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (lvDSPV.SelectedItems.Count>0)
+            if (lvDSPV.SelectedItems.Count > 0)
             {
                 //get id in listview
                 string mapv = lvDSPV.SelectedItems[0].SubItems[0].Text;
                 txtMaPV.Enabled = false;
                 //find in _db if exists ?
                 var pv = _db.PhongViens.SingleOrDefault(z => z.maPV == mapv);
-                if (pv!=null)
+                if (pv != null)
                 {
-                    txtMaPV.Text=pv.maPV.Trim();
-                    txtHoTen.Text=pv.tenPV.Trim();
-                    if (pv.GT=="Nam")
+                    txtMaPV.Text = pv.maPV.Trim();
+                    txtHoTen.Text = pv.tenPV.Trim();
+                    if (pv.GT == "Nam")
                     {
                         rdbtnNam.Checked = true;
                     }
@@ -202,15 +186,15 @@ namespace QuanLyPhongVienEntityFramwork
                     {
                         rdbtnNu.Checked = true;
                     }
-                    txtDienthoai.Text=pv.soDT.Trim() ;
+                    txtDienthoai.Text = pv.soDT.Trim();
                     dtNVL.Value = pv.ngayVL.Value;
-                    if (pv.loaiPV=="ToaSoan")
+                    if (pv.loaiPV == "ToaSoan")
                     {
                         rdbtnToasoan.Checked = true;
                         txtGioLT.Text = pv.gioLT.ToString();
                         txtPC.Clear();
                     }
-                    else if (pv.loaiPV=="ThuongTru")
+                    else if (pv.loaiPV == "ThuongTru")
                     {
                         rdbtnTT.Checked = true;
                         txtPC.Text = pv.PC.ToString().Trim();
@@ -220,7 +204,7 @@ namespace QuanLyPhongVienEntityFramwork
                 else
                 {
                     MessageBox.Show("Không tìm thấy thông tin phóng viên!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return ;
+                    return;
                 }
             }
             else
@@ -231,12 +215,12 @@ namespace QuanLyPhongVienEntityFramwork
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            if (lvDSPV.SelectedItems.Count>0)
+            if (lvDSPV.SelectedItems.Count > 0)
             {
-                if(MessageBox.Show("Bạn có chắc chắn muốn xóa phóng viên đã chọn?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
+                if (MessageBox.Show("Bạn có chắc chắn muốn xóa phóng viên đã chọn?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
                 {
-                    int index = lvDSPV.Items.IndexOf(lvDSPV.SelectedItems[0]) ;
-                    string mpv = lvDSPV.SelectedItems[0].SubItems[0].Text.Trim() ;
+                    int index = lvDSPV.Items.IndexOf(lvDSPV.SelectedItems[0]);
+                    string mpv = lvDSPV.SelectedItems[0].SubItems[0].Text.Trim();
 
                     PhongVien pv = _db.PhongViens.Where(p => p.maPV.Trim() == mpv).SingleOrDefault();
                     _db.PhongViens.Remove(pv);
@@ -244,9 +228,9 @@ namespace QuanLyPhongVienEntityFramwork
 
                     lvDSPV.Items.Remove(lvDSPV.SelectedItems[0]);
 
-                    if (lvDSPV.Items.Count>0)
+                    if (lvDSPV.Items.Count > 0)
                     {
-                        if (index<lvDSPV.Items.Count)
+                        if (index < lvDSPV.Items.Count)
                         {
                             lvDSPV.Items[index].Selected = true;
                         }
@@ -294,18 +278,17 @@ namespace QuanLyPhongVienEntityFramwork
                 {
                     pv.tenPV = txtHoTen.Text;
                     pv.GT = rdbtnNam.Checked ? "Nam" : "Nu";
-                    pv.soDT=txtDienthoai.Text;
+                    pv.soDT = txtDienthoai.Text;
                     pv.ngayVL = dtNVL.Value;
                     pv.loaiPV = rdbtnToasoan.Checked ? "ToaSoan" : "ThuongTru";
                     pv.gioLT = giolt;
                     pv.PC = pc;
                     pv.Luong = salary;
                     _db.SaveChanges();
-                    txtMaPV.Enabled = true;
                     ResetListView(_db.PhongViens.ToList());
-                    Reset();
+                    MessageBox.Show("Đã sửa phóng viên thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Question);
                 }
-                MessageBox.Show("Đã sửa phóng viên thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Question);
+                lvDSPV.Items[index].Selected = true;
             }
             else
             {
@@ -319,9 +302,10 @@ namespace QuanLyPhongVienEntityFramwork
             {
                 var sort = _db.PhongViens.OrderBy(p => p.ngayVL).ThenBy(p => p.tenPV).ToList();
                 ResetListView(sort);
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
-                MessageBox.Show("Error: "+ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -342,7 +326,7 @@ namespace QuanLyPhongVienEntityFramwork
 
                 foreach (var t in s)
                 {
-                    if (t.LoaiPV=="ToaSoan")
+                    if (t.LoaiPV == "ToaSoan")
                         message += $"Phóng viên tại tòa soạn:\n";
                     else
                         message += $"Phóng viên thường trú:\n";
